@@ -44,6 +44,7 @@ const vpassword = value => {
 
 export default class Register extends Component {
   constructor(props){
+    super(props);
     this.handleRegister = this.handleRegister.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
