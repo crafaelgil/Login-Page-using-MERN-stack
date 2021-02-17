@@ -1,0 +1,73 @@
+import React, { Component } from 'react';
+import Form from 'react-validation/build/form';
+import Input from 'react-validation/build/input';
+import CheckButtom from 'react-validation/build/button';
+
+import AuthService from '../services/auth.service';
+
+const required = value => {
+  if(!value) {
+    return(
+      <div className="alert alert-danger" role="alert">
+        This field is required
+      </div>
+    );
+  }
+}
+
+export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangePassword = this.onChangePassword(this);
+
+    this.state = {
+      username: "",
+      password: "",
+      loading: false,
+      message: ''
+    }
+  }
+
+  onChangeUsername(e) {
+    this.setState({ name: e.target.value });
+  }
+
+  onChangePassword(e) {
+    this.setState({ password: e.target.value });
+  }
+
+  handleLogin(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      loading: true
+    });
+
+    this.form.validateAll();
+
+    if(this.checkBtn.context._errors.length === 0) {
+      AuthService
+        .login(this.state.username, this.state.password)
+        .then(() => {
+          this.props.history.push('/profile');
+          window.location.reload();
+        }, error => {
+          const resMessage = (error.response && error.response.data && error.response.data.message)
+                              || error.message
+                              || error.toString();
+          this.setState({
+            message: resMessage,
+            loading: false
+          });
+        });
+    }
+    else {
+      this.setState({
+        loading: false
+      });
+    }
+  }
+}
