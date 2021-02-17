@@ -43,5 +43,66 @@ const vpassword = value => {
 }
 
 export default class Register extends Component {
-  
+  constructor(props){
+    this.handleRegister = this.handleRegister.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+
+    this.state = {
+      username: "",
+      password: "",
+      email: "",
+      successful: false,
+      message: ""
+    }
+  }
+
+  onChangeUsername(e) {
+    this.setState({
+      username: e.target.value
+    });
+  }
+
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value
+    });
+  }
+
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value
+    });
+  }  
+
+  handleRegister(e) {
+    e.preventDefault();
+
+    this.setState({
+      message: "",
+      successful: false
+    });
+
+    this.form.validateAll();
+
+    if(this.CheckBtn.context._errors.length === 0) {
+      AuthService
+        .register(this.state.username, this.state.email, this.state.password)
+        .then(response => {
+          this.setState({
+            message: response.data.message,
+            successful: true
+          });
+        }, error => {
+          const resMessage = (error.response && error.response.data && error.response.data.message)
+                              || error.message
+                              || error.toString();
+          this.setState({
+            message: resMessage,
+            successful: false
+          });
+        });
+    }
+  }
 }
