@@ -9,7 +9,7 @@ export default class BoardUser extends Component {
       content: ""
     }
   }
-  
+
   componentDidMount() {
     UserService
       .getUserBoard()
@@ -25,5 +25,15 @@ export default class BoardUser extends Component {
                     || error.toString()
         });
       });
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <header className="jumbotron">
+          <h3>{this.state.content}</h3>
+        </header>
+      </div>
+    )
   }
 }
